@@ -1,33 +1,24 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
 import React from 'react';
 import {
-  SafeAreaView,
   ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
-  useColorScheme,
   View,
   TextInput,
   TouchableOpacity,
   Image,
 } from 'react-native';
 
-import Images from './src/assets';
+import Images from '../../assets';
+import Button from '../../components/Button';
 
-import {moderateScale, getWidth} from './ModerateScale';
+import {moderateScale, getWidth} from '../../helper';
+import {RoutesName} from '../../navigation';
+import {NavigationController} from '../../navigation/NavigationController';
 
-const App2 = () => {
-  const [text, setText] = React.useState('Taikhoan');
-  const [password, setPassword] = React.useState('password');
-  const [isShow, setIsShow] = React.useState(false);
+const Login = () => {
+  const [text, setText] = React.useState('');
+  const [password, setPassword] = React.useState('');
 
   return (
     <View style={styles.container}>
@@ -38,50 +29,71 @@ const App2 = () => {
           <TextInput
             style={styles.input}
             onChangeText={value => {
-              setNumber(value);
+              setText(value);
             }}
+            placeholder="Tai khoan"
             value={text}
           />
           {/* password */}
-          <View>
-            <TextInput
-              style={styles.input1}
-              onChangeText={val => {
-                setText(val);
-              }}
-              value={password}
-            />
-          </View>
+          <TextInput
+            style={styles.input1}
+            onChangeText={val => {
+              setPassword(val);
+            }}
+            placeholder="Mat khau"
+          />
           {/* dang nhap */}
-          <TouchableOpacity
-            onPress={() => alert(password)}
-            style={styles.touchableOpacity}>
-            <Text style={styles.dangnhap}>Dang nhap</Text>
-          </TouchableOpacity>
-          {/* chua co taikhoan */}
+          <Button
+            text="Log In"
+            textColor={'#fff'}
+            backgroundColor="#007BB3"
+            width={moderateScale(339)}
+            onPress={() => alert(`${text} ${password}`)}
+          />
+          {/* chua co taikhoan _FIX */}
           <View style={styles.viewTextForgetPassword}>
-            <Text style={styles.textFogetPassword}>Forgot Password</Text>
-            <Text style={styles.taikhoan}>chua co tai khoan?</Text>
-            <Text style={styles.dangky}>Dang ky</Text>
+            <Text
+              style={styles.textFogetPassword}
+              onPress={() =>
+                NavigationController.navigate(RoutesName.ForgetPassword)
+              }>
+              Forgot Password
+            </Text>
+            <Text style={styles.taikhoan}>
+              {`Chua co tai khoan? `}
+              <Text style={styles.dangky}>Dang ky</Text>
+            </Text>
           </View>
           {/* login with */}
           <TouchableOpacity style={styles.touchLogin}>
             <Text style={styles.textLogin}>login with </Text>
           </TouchableOpacity>
           {/* facebook */}
-          <TouchableOpacity style={styles.touchableOpacity1}>
-            <Text style={styles.textButton1}>login with Facebook</Text>
-          </TouchableOpacity>
+          <Button
+            text="Login with Facebook"
+            textColor={'#fff'}
+            backgroundColor="#1877F2"
+            width={moderateScale(218)}
+            icon={Images.fb}
+          />
           {/* google */}
-          <TouchableOpacity style={styles.touchableOpacity2}>
-            <Text style={styles.textButton2}>Login with Google</Text>
-          </TouchableOpacity>
+          <Button
+            text="Login with Google"
+            textColor={'#025DD7'}
+            backgroundColor="#fff"
+            borderColor="#2F80ED"
+            borderWidth={1}
+            width={moderateScale(218)}
+            icon={Images.google}
+          />
+          <View style={{height: moderateScale(30)}} />
         </View>
       </ScrollView>
     </View>
   );
 };
 
+export default Login;
 const styles = StyleSheet.create({
   textHeader: {
     fontWeight: 'bold',
@@ -112,10 +124,11 @@ const styles = StyleSheet.create({
   },
 
   viewTextForgetPassword: {
-    alignSelf: 'center',
     flexDirection: 'row',
-    // marginLeft: moderateScale(4),
     marginTop: moderateScale(24),
+    width: getWidth(),
+    justifyContent: 'space-between',
+    paddingHorizontal: moderateScale(18),
   },
   container: {
     backgroundColor: '#f1f4f6',
@@ -157,52 +170,9 @@ const styles = StyleSheet.create({
   },
   textButton1: {
     color: '#FFFFFF',
-    fontSize: moderateScale(16),
-    lineHeight: moderateScale(32),
-  },
-  textButton2: {
-    color: '#025DD7',
-    fontSize: moderateScale(16),
-    lineHeight: moderateScale(32),
-  },
-  touchableOpacity: {
-    backgroundColor: '#025DD7',
-
-    borderRadius: moderateScale(8),
-    paddingVertical: moderateScale(8),
-    alignItems: 'center',
-    height: moderateScale(48),
-
-    marginHorizontal: moderateScale(18),
-    marginTop: moderateScale(24),
-  },
-  touchableOpacity1: {
-    marginLeft: moderateScale(78),
-    marginRight: moderateScale(79),
-    borderRadius: moderateScale(8),
-
-    paddingVertical: moderateScale(12),
-    alignItems: 'center',
-    borderRadius: moderateScale(8),
-
-    borderWidth: 1,
-    marginTop: moderateScale(16),
-    backgroundColor: '#1877F2',
-    borderColor: '#2F80ED',
-  },
-  touchableOpacity2: {
-    marginLeft: moderateScale(78),
-    marginRight: moderateScale(79),
-    borderRadius: moderateScale(8),
-
-    paddingVertical: moderateScale(12),
-    alignItems: 'center',
-    borderRadius: moderateScale(8),
-    backgroundColor: '#FFFFFF',
-    borderColor: '#2F80ED',
-    borderWidth: 1,
-    marginBottom: moderateScale(47),
-    marginTop: moderateScale(12),
+    fontSize: moderateScale(14),
+    lineHeight: moderateScale(20),
+    paddingRight: moderateScale(16),
   },
 
   tinyLogo: {
@@ -218,45 +188,22 @@ const styles = StyleSheet.create({
     // borderTopRightRadius: moderateScale(32),
     // borderTopLeftRadius: moderateScale(32),
   },
-  tinyLogo1: {
-    marginTop: moderateScale(28),
-    marginBottom: moderateScale(14),
-    marginLeft: moderateScale(28),
-    height: moderateScale(26),
-    width: moderateScale(162),
-  },
   viewNameContent: {
     marginLeft: moderateScale(28),
     marginRight: moderateScale(28),
-  },
-  viewYourName: {
-    marginTop: moderateScale(28),
   },
   eye: {
     height: moderateScale(16),
     width: moderateScale(16),
   },
-  viewInput: {
-    flexDirection: 'row',
-    borderWidth: 1,
-    borderColor: '#D3DEE8',
-    width: moderateScale(339),
-    alignSelf: 'center',
-    alignItems: 'center',
-    borderRadius: moderateScale(8),
-    backgroundColor: 'red',
-    marginTop: moderateScale(20),
-  },
   taikhoan: {
     fontSize: moderateScale(15),
     lineHeight: moderateScale(22),
-    marginLeft: moderateScale(74),
   },
   textFogetPassword: {
     fontSize: moderateScale(15),
     color: '#0364D9',
     lineHeight: moderateScale(22),
-    // marginLeft: -85,
   },
   dangky: {
     fontSize: moderateScale(15),
@@ -284,5 +231,3 @@ const styles = StyleSheet.create({
     marginHorizontal: moderateScale(64),
   },
 });
-
-export default App2;
